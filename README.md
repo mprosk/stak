@@ -38,16 +38,36 @@ $ stak
 
 The following operations are currently supported
 
-| Operation         | Symbol | Args |
-| ----------------- | ------ | ---- |
-| Addition          | `+`    | 2    |
-| Subtraction       | `-`    | 2    |
-| Multiplication    | `*`    | 2    |
-| Division          | `/`    | 2    |
-| Modulus           | `%`    | 2    |
-| Inversion         | `inv`  | 1    |
-| Square root       | `sqrt` | 1    |
-| Log<sub>2</sub>   | `log2` | 1    |
-| Pop the top value | `.`    | 0    |
-| Clear the stack   | `..`   | 0    |
+| Operation               | Symbol      | Args |
+| ----------------------- | ----------- | ---- |
+| Addition                | `+`         | 2    |
+| Subtraction             | `-`         | 2    |
+| Multiplication          | `*`         | 2    |
+| Division                | `/`         | 2    |
+| Modulus                 | `%`         | 2    |
+| Power                   | `^` or `**` | 2    |
+| Inversion               | `inv`       | 1    |
+| Square root             | `sqrt`      | 1    |
+| Log<sub>2</sub>         | `log2`      | 1    |
+| Floor                   | `floor`     | 1    |
+| Ceiling                 | `ceil`      | 1    |
+| Absolute value          | `abs`       | 1    |
+| Pop the top value       | `.`         | 0    |
+| Clear the stack         | `..`        | 0    |
+| Duplicate the top value | `&`         | 1    |
+
+### Constants
+
+The following mathematical constants are currently supported
+
+- `pi`
+- `e`
+
+Example:
+
+```
+$ stak
+> 2.5 2 ^ pi *
+[19.634954084936208]
+```
 

@@ -8,6 +8,7 @@ use structopt::StructOpt;
 const LONG_HELP: &str = r#"Operators:
 .   drop the top value of the stack
 ..  clear the stack
+&   duplicate the top value
 +   add the top two values
 -   subtract the top two values
 *   multiply the top two values
@@ -16,7 +17,10 @@ const LONG_HELP: &str = r#"Operators:
 ^   raise the second value to the top values
 inv     takes 1 divided by the top value
 sqrt    perform a square root on the top value
-log2    perform a base-2 log on the top value"#;
+log2    perform a base-2 log on the top value
+floor   floor the top value
+ceil    ceiling the top value
+abs     take the absolute value"#;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "stak")]

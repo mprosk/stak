@@ -28,35 +28,43 @@ impl Stak {
             self.stack.push(val);
         } else {
             return match token {
-                // Drop the top value
+                // STACK MANAGEMENT
                 "." => {
+                    // Drop the top value
                     let _ = self.stack.pop();
                     Ok(())
                 }
-                // Clear the stack
                 ".." => {
+                    // Clear the stack
                     self.stack.clear();
                     Ok(())
                 }
+                "&" => self.dupe(), // Duplicate the top value
 
-                // Addition
+                // OPERATORS
                 "+" => self.add(),
-                // Subtraction
                 "-" => self.sub(),
-                // Multiplication
                 "*" => self.mult(),
-                // Division
                 "/" => self.div(),
-                // Power
                 "^" => self.pow(),
-                // Modulo
+                "**" => self.pow(),
                 "%" => self.modulo(),
-                // Square Root
                 "sqrt" => self.sqrt(),
-                // Log base 2
                 "log2" => self.log2(),
-                // Inversion
                 "inv" => self.inv(),
+                "ceil" => self.ceil(),
+                "floor" => self.floor(),
+                "abs" => self.abs(),
+
+                // CONSTANTS
+                "e" => {
+                    self.stack.push(std::f64::consts::E);
+                    Ok(())
+                }
+                "pi" => {
+                    self.stack.push(std::f64::consts::PI);
+                    Ok(())
+                }
 
                 _ => Err(InvalidToken(token.to_string())),
             };
@@ -167,6 +175,48 @@ impl Stak {
         } else {
             Err(StackEmpty)
         }
+    }
+
+    /// Performs a floor
+    fn floor(&mut self) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            let a = self.stack.pop().unwrap();
+            self.stack.push(a.floor());
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
+    /// Performs a ceiling
+    fn ceil(&mut self) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            let a = self.stack.pop().unwrap();
+            self.stack.push(a.ceil());
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
+    /// Performs an absolute value
+    fn abs(&mut self) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            let a = self.stack.pop().unwrap();
+            self.stack.push(a.abs());
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
+    /// Clones the top value of the stack
+    fn dupe(&mut self) -> Result<(), StakError> {
+        if let Some(a) = self.stack.pop() {
+            self.stack.push(a);
+            self.stack.push(a);
+        }
+        Ok(())
     }
 }
 
