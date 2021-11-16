@@ -49,10 +49,14 @@ impl Stak {
                 "/" => self.div(),
                 // Power
                 "^" => self.pow(),
+                // Modulo
+                "%" => self.modulo(),
                 // Square Root
                 "sqrt" => self.sqrt(),
                 // Log base 2
                 "log2" => self.log2(),
+                // Inversion
+                "inv" => self.inv(),
 
                 _ => Err(InvalidToken(token.to_string())),
             };
@@ -120,6 +124,18 @@ impl Stak {
         }
     }
 
+    /// Performs a modulo
+    fn modulo(&mut self) -> Result<(), StakError> {
+        if self.stack.len() >= 2 {
+            let a = self.stack.pop().unwrap();
+            let b = self.stack.pop().unwrap();
+            self.stack.push(b % a);
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
     /// Performs a square root
     fn sqrt(&mut self) -> Result<(), StakError> {
         if !self.stack.is_empty() {
@@ -136,6 +152,17 @@ impl Stak {
         if !self.stack.is_empty() {
             let a = self.stack.pop().unwrap();
             self.stack.push(a.log2());
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
+    /// Performs an inversion
+    fn inv(&mut self) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            let a = self.stack.pop().unwrap();
+            self.stack.push(1_f64 / a);
             Ok(())
         } else {
             Err(StackEmpty)
