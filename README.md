@@ -18,7 +18,7 @@ $ stak 12.6 17 / .5 3 ^
 
 #### Interactive
 
-To start stak in interactive mode, simply run the program with no arguments. Values and operators can be entered one at a time or on one line with spaces separating them
+To start stak in interactive mode, simply run the program with no arguments. Values and operators can be entered one at a time or on one line with spaces separating them. Type `help` or `?` for a list of operators.
 
 ```
 $ stak
@@ -38,14 +38,16 @@ $ stak
 
 The following operations are currently supported
 
-| Operation       | Symbol | Args |
-| --------------- | ------ | ---- |
-| Addition        | `+`    | 2    |
-| Subtraction     | `-`    | 2    |
-| Multiplication  | `*`    | 2    |
-| Division        | `/`    | 2    |
-| Modulus         | `%`    | 2    |
-| Inversion       | `inv`  | 1    |
-| Square root     | `sqrt` | 1    |
-| Log<sub>2</sub> | `log2` | 1    |
+| Operation         | Symbol | Args |
+| ----------------- | ------ | ---- |
+| Addition          | `+`    | 2    |
+| Subtraction       | `-`    | 2    |
+| Multiplication    | `*`    | 2    |
+| Division          | `/`    | 2    |
+| Modulus           | `%`    | 2    |
+| Inversion         | `inv`  | 1    |
+| Square root       | `sqrt` | 1    |
+| Log<sub>2</sub>   | `log2` | 1    |
+| Pop the top value | `.`    | 0    |
+| Clear the stack   | `..`   | 0    |
 
