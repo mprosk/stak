@@ -173,7 +173,7 @@ impl Stak {
 // Errors
 #[derive(Error, Debug)]
 pub enum StakError {
-    #[error("invalid token {0}")]
+    #[error("invalid token `{0}`")]
     InvalidToken(String),
     #[error("not enough values on the stack")]
     StackEmpty,

@@ -7,7 +7,7 @@ stak can be used in two modes: one-shot from the command line, or in an interact
 
 #### One-shot
 
-In one-shot mode, include the sequence of values and operators you wish to evaluate as arguments to the binary
+In one-shot mode, include the sequence of values and operators you wish to evaluate as arguments to the binary. Note that it may be required to put the arguments in quote marks depending on your shell.
 
 ```
 $ stak 3 7 * 4 /

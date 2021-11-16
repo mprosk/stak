@@ -21,6 +21,8 @@ log2    perform a base-2 log on the top value"#;
 #[derive(StructOpt, Debug)]
 #[structopt(name = "stak")]
 /// Command line based RPN calculator
+///
+/// Run with no arguments to enter the interactive shell
 struct Opts {
     #[structopt(name = "TOKEN", long_help = LONG_HELP)]
     /// Numbers and operators
@@ -50,10 +52,20 @@ fn interactive() {
             continue;
         }
 
-        // Check for help
-        if tokens.trim() == "?" || tokens.trim().to_lowercase() == "help" {
-            println!("{}", LONG_HELP);
-            continue;
+        // Check for interactive-only commands
+        match tokens.trim() {
+            "?" => {
+                println!("{}", LONG_HELP);
+                continue;
+            }
+            "help" => {
+                println!("{}", LONG_HELP);
+                continue;
+            }
+            "exit" => exit(0),
+            "quit" => exit(0),
+            "q" => exit(0),
+            _ => {}
         }
 
         // Process each token
@@ -75,9 +87,11 @@ fn interactive() {
 fn oneshot(tokens: &[String]) {
     let mut stack = Stak::new();
     for token in tokens {
-        if let Err(e) = stack.parse_token(token) {
-            println!("Error: {:#}", e);
-            exit(1);
+        for t in token.trim().split(' ') {
+            if let Err(e) = stack.parse_token(t) {
+                println!("Error: {:#}", e);
+                exit(1);
+            }
         }
     }
     stack.print_stack();
