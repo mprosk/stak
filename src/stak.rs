@@ -50,6 +50,7 @@ impl Stak {
                 "^" => self.pow(),
                 "**" => self.pow(),
                 "%" => self.modulo(),
+                "||" => self.parallel(),
                 "sqrt" => self.sqrt(),
                 "log2" => self.log2(),
                 "inv" => self.inv(),
@@ -235,24 +236,47 @@ impl Stak {
 
     /// Performs a summation of all values in the stack
     fn sum(&mut self) -> Result<(), StakError> {
-        let mut sum = 0_f64;
-        for x in &self.stack {
-            sum += *x;
+        if !self.stack.is_empty() {
+            let mut sum = 0_f64;
+            for x in &self.stack {
+                sum += *x;
+            }
+            self.stack.clear();
+            self.stack.push(sum);
+            Ok(())
+        } else {
+            Err(StackEmpty)
         }
-        self.stack.clear();
-        self.stack.push(sum);
-        Ok(())
     }
 
     /// Performs a product of all values in the stack
     fn prod(&mut self) -> Result<(), StakError> {
-        let mut prod = 1_f64;
-        for x in &self.stack {
-            prod *= *x;
+        if !self.stack.is_empty() {
+            let mut prod = 1_f64;
+            for x in &self.stack {
+                prod *= *x;
+            }
+            self.stack.clear();
+            self.stack.push(prod);
+            Ok(())
+        } else {
+            Err(StackEmpty)
         }
-        self.stack.clear();
-        self.stack.push(prod);
-        Ok(())
+    }
+
+    /// Performs a parallel equivalency on all values
+    fn parallel(&mut self) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            let mut sum = 0_f64;
+            for x in &self.stack {
+                sum += 1_f64 / *x;
+            }
+            self.stack.clear();
+            self.stack.push(1_f64 / sum);
+            Ok(())
+        } else {
+            Err(StackEmpty)
+        }
     }
 }
 

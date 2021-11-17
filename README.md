@@ -38,24 +38,27 @@ $ stak
 
 The following operations are currently supported
 
-| Operation               | Symbol      | Args |
-| ----------------------- | ----------- | ---- |
-| Addition                | `+`         | 2    |
-| Subtraction             | `-`         | 2    |
-| Multiplication          | `*`         | 2    |
-| Division                | `/`         | 2    |
-| Modulus                 | `%`         | 2    |
-| Power                   | `^` or `**` | 2    |
-| Inversion               | `inv`       | 1    |
-| Square root             | `sqrt`      | 1    |
-| Log<sub>2</sub>         | `log2`      | 1    |
-| Floor                   | `floor`     | 1    |
-| Ceiling                 | `ceil`      | 1    |
-| Absolute value          | `abs`       | 1    |
-| Pop the top value       | `.`         | 0    |
-| Clear the stack         | `..`        | 0    |
-| Duplicate the top value | `&`         | 1    |
-| Swap the top two values | `<>`        | 2    |
+| Operation                            | Symbol      | Args |
+| ------------------------------------ | ----------- | ---- |
+| Addition                             | `+`         | 2    |
+| Subtraction                          | `-`         | 2    |
+| Multiplication                       | `*`         | 2    |
+| Division                             | `/`         | 2    |
+| Modulus                              | `%`         | 2    |
+| Power                                | `^` or `**` | 2    |
+| Parallel sum                         | `||`        | 1+   |
+| Inversion                            | `inv`       | 1    |
+| Square root                          | `sqrt`      | 1    |
+| Log<sub>2</sub>                      | `log2`      | 1    |
+| Floor                                | `floor`     | 1    |
+| Ceiling                              | `ceil`      | 1    |
+| Absolute value                       | `abs`       | 1    |
+| Summation of all values in the stack | `sum`       | 1+   |
+| Product of all vales in the stack    | `prod`      | 1+   |
+| Pop the top value                    | `.`         | 0    |
+| Clear the stack                      | `..`        | 0    |
+| Duplicate the top value              | `&`         | 1    |
+| Swap the top two values              | `<>`        | 2    |
 
 ### Constants
 

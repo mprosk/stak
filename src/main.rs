@@ -15,7 +15,8 @@ const LONG_HELP: &str = r#"Operators:
 *   multiply the top two values
 /   divide the top two values
 %   modulo the top two values
-^   raise the second value to the top values
+||  perform a parallel sum on all values
+^ or ** raise the second value to the top values
 inv     take 1 divided by the top value
 sqrt    perform a square root on the top value
 log2    perform a base-2 log on the top value
