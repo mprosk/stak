@@ -1,4 +1,4 @@
-use crate::stak::StakError::{InvalidToken, StackEmpty};
+use crate::stak::StakError::{IndexOutOfRange, InvalidIndex, InvalidToken, StackEmpty};
 use thiserror::Error;
 
 /// Container structure for the RPN calculator engine
@@ -27,6 +27,18 @@ impl Stak {
         if let Ok(val) = token.parse::<f64>() {
             self.stack.push(val);
         } else {
+            // Check compound operators
+            if token.starts_with('~') {
+                return self.parse_dupe(token);
+            }
+            if token.starts_with("<<") {
+                return self.parse_rotate_left(token);
+            }
+            if token.starts_with(">>") {
+                return self.parse_rotate_right(token);
+            }
+
+            // Check standard operators
             return match token {
                 // STACK MANAGEMENT
                 "." => {
@@ -39,7 +51,6 @@ impl Stak {
                     self.stack.clear();
                     Ok(())
                 }
-                "&" => self.dupe(), // Duplicate the top value
                 "<>" => self.swap(), // Swap the top values
 
                 // OPERATORS
@@ -74,6 +85,57 @@ impl Stak {
             };
         }
         Ok(())
+    }
+
+    /// Parses the index duplication token and executes if valid
+    fn parse_dupe(&mut self, token: &str) -> Result<(), StakError> {
+        let subtokens: Vec<&str> = token.split('~').collect();
+        if subtokens.len() == 2 {
+            if subtokens[1] == "" {
+                self.dupe(0)
+            }
+            else if let Ok(i) = subtokens[1].parse::<u64>() {
+                self.dupe(i as usize)
+            } else {
+                Err(InvalidIndex(subtokens[1].to_string()))
+            }
+        } else {
+            Err(InvalidToken(token.to_string()))
+        }
+    }
+
+    /// Parses the rotate left token and executes if valid
+    fn parse_rotate_left(&mut self, token: &str) -> Result<(), StakError> {
+        let subtokens: Vec<&str> = token.split("<<").collect();
+        if subtokens.len() == 2 {
+            if subtokens[1] == "" {
+                self.rotate_left(1)
+            }
+            else if let Ok(i) = subtokens[1].parse::<u64>() {
+                self.rotate_left(i as usize)
+            } else {
+                Err(InvalidIndex(subtokens[1].to_string()))
+            }
+        } else {
+            Err(InvalidToken(token.to_string()))
+        }
+    }
+
+    /// Parses the rotate right token and executes if valid
+    fn parse_rotate_right(&mut self, token: &str) -> Result<(), StakError> {
+        let subtokens: Vec<&str> = token.split(">>").collect();
+        if subtokens.len() == 2 {
+            if subtokens[1] == "" {
+                self.rotate_right(1)
+            }
+            else if let Ok(i) = subtokens[1].parse::<u64>() {
+                self.rotate_right(i as usize)
+            } else {
+                Err(InvalidIndex(subtokens[1].to_string()))
+            }
+        } else {
+            Err(InvalidToken(token.to_string()))
+        }
     }
 
     /// Performs an addition
@@ -214,11 +276,33 @@ impl Stak {
         }
     }
 
-    /// Clones the top value of the stack
-    fn dupe(&mut self) -> Result<(), StakError> {
-        if let Some(a) = self.stack.pop() {
-            self.stack.push(a);
-            self.stack.push(a);
+    /// Clones the n-th value of the stack
+    fn dupe(&mut self, index: usize) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            if index < self.stack.len() {
+                let i = self.stack.len() - 1 - index;
+                self.stack.push(self.stack[i]);
+                Ok(())
+            } else {
+                Err(IndexOutOfRange(index))
+            }
+        } else {
+            Err(StackEmpty)
+        }
+    }
+
+    /// Rotates the stack `i` times to the left
+    fn rotate_left(&mut self, i: usize) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            self.stack.rotate_left(i);
+        }
+        Ok(())
+    }
+
+    /// Rotates the stack `i` times to the right
+    fn rotate_right(&mut self, i: usize) -> Result<(), StakError> {
+        if !self.stack.is_empty() {
+            self.stack.rotate_right(i);
         }
         Ok(())
     }
@@ -287,4 +371,8 @@ pub enum StakError {
     InvalidToken(String),
     #[error("not enough values on the stack")]
     StackEmpty,
+    #[error("index {0} is out of range")]
+    IndexOutOfRange(usize),
+    #[error("index `{0}` is invalid")]
+    InvalidIndex(String),
 }

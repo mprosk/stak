@@ -6,10 +6,6 @@ use std::process::exit;
 use structopt::StructOpt;
 
 const LONG_HELP: &str = r#"Operators:
-.   drop the top value of the stack
-..  clear the stack
-&   duplicate the top value
-<>  swap the top two values
 +   add the top two values
 -   subtract the top two values
 *   multiply the top two values
@@ -24,7 +20,18 @@ floor   floor the top value
 ceil    ceiling the top value
 abs     take the absolute value
 sum     add all values together
-prod    multiply all values together"#;
+prod    multiply all values together
+
+Stack Management:
+.   drop the top value of the stack
+..  clear the stack
+~   duplicate the top value
+~#  duplicate the value at index # (ex. `~2`)
+<>  swap the top two values
+<<  rotate the stack to the left
+<<# rotate the stack # times to the left (ex. `<<3`)
+>>  rotate the stack to the right
+>># rotate the stack # times to the right (ex. `>>3`)"#;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "stak")]
@@ -80,7 +87,7 @@ fn interactive() {
         for token in tokens.trim().split(' ') {
             if !token.is_empty() {
                 if let Err(e) = stack.parse_token(token) {
-                    println!("Error: {:#}", e);
+                    println!("Error: {}", e);
                     break;
                 }
             }
@@ -97,7 +104,7 @@ fn oneshot(tokens: &[String]) {
     for token in tokens {
         for t in token.trim().split(' ') {
             if let Err(e) = stack.parse_token(t) {
-                println!("Error: {:#}", e);
+                println!("Error: {}", e);
                 exit(1);
             }
         }
