@@ -107,7 +107,7 @@ $ stak
 
 ### Duplicate `~`
 
-Duplicates the top value of the stack. An optional index can be specified, duplicating the value at that value. Stack indexes are zero-based and originate at the top of the stack.
+Duplicates the top value of the stack. An optional index can be specified, duplicating the value at that index. Stack indices are zero-based and originate at the top of the stack.
 
 Example:
 
