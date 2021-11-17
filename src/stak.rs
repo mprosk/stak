@@ -40,6 +40,7 @@ impl Stak {
                     Ok(())
                 }
                 "&" => self.dupe(), // Duplicate the top value
+                "<>" => self.swap(), // Swap the top values
 
                 // OPERATORS
                 "+" => self.add(),
@@ -55,6 +56,8 @@ impl Stak {
                 "ceil" => self.ceil(),
                 "floor" => self.floor(),
                 "abs" => self.abs(),
+                "sum" => self.sum(),
+                "prod" => self.prod(),
 
                 // CONSTANTS
                 "e" => {
@@ -216,6 +219,39 @@ impl Stak {
             self.stack.push(a);
             self.stack.push(a);
         }
+        Ok(())
+    }
+
+    /// Swaps the top two values
+    fn swap(&mut self) -> Result<(), StakError> {
+        if self.stack.len() >= 2 {
+            let a = self.stack.pop().unwrap();
+            let b = self.stack.pop().unwrap();
+            self.stack.push(a);
+            self.stack.push(b);
+        }
+        Ok(())
+    }
+
+    /// Performs a summation of all values in the stack
+    fn sum(&mut self) -> Result<(), StakError> {
+        let mut sum = 0_f64;
+        for x in &self.stack {
+            sum += *x;
+        }
+        self.stack.clear();
+        self.stack.push(sum);
+        Ok(())
+    }
+
+    /// Performs a product of all values in the stack
+    fn prod(&mut self) -> Result<(), StakError> {
+        let mut prod = 1_f64;
+        for x in &self.stack {
+            prod *= *x;
+        }
+        self.stack.clear();
+        self.stack.push(prod);
         Ok(())
     }
 }

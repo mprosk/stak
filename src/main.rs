@@ -9,18 +9,21 @@ const LONG_HELP: &str = r#"Operators:
 .   drop the top value of the stack
 ..  clear the stack
 &   duplicate the top value
+<>  swap the top two values
 +   add the top two values
 -   subtract the top two values
 *   multiply the top two values
 /   divide the top two values
 %   modulo the top two values
 ^   raise the second value to the top values
-inv     takes 1 divided by the top value
+inv     take 1 divided by the top value
 sqrt    perform a square root on the top value
 log2    perform a base-2 log on the top value
 floor   floor the top value
 ceil    ceiling the top value
-abs     take the absolute value"#;
+abs     take the absolute value
+sum     add all values together
+prod    multiply all values together"#;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "stak")]

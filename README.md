@@ -55,6 +55,7 @@ The following operations are currently supported
 | Pop the top value       | `.`         | 0    |
 | Clear the stack         | `..`        | 0    |
 | Duplicate the top value | `&`         | 1    |
+| Swap the top two values | `<>`        | 2    |
 
 ### Constants
 
