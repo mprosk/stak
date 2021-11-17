@@ -46,7 +46,7 @@ The following operations are currently supported
 | Division                             | `/`         | 2    |
 | Modulus                              | `%`         | 2    |
 | Power                                | `^` or `**` | 2    |
-| Parallel sum                         | `||`        | 1+   |
+| Parallel sum                         | <code>&#124;&#124;</code> | 1+   |
 | Inversion                            | `inv`       | 1    |
 | Square root                          | `sqrt`      | 1    |
 | Log<sub>2</sub>                      | `log2`      | 1    |
