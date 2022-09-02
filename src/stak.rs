@@ -1,3 +1,4 @@
+use crate::number::Number;
 use crate::stak::StakError::{IndexOutOfRange, InvalidIndex, InvalidToken, StackEmpty};
 use thiserror::Error;
 
@@ -7,6 +8,16 @@ pub struct Stak {
     stack: Vec<f64>,
 }
 
+// impl Display for Stak {
+//     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+//         let mut s = String::new();
+//         for val in &self.stack {
+//             s = format!("{}{}, ", s, Number::f64_to_string(*val));
+//         }
+//         write!(f, "[{}]", s)
+//     }
+// }
+
 impl Stak {
     /// Creates a new Stak structure
     pub fn new() -> Stak {
@@ -14,9 +25,19 @@ impl Stak {
         Stak { stack }
     }
 
-    /// Prints the contents of the stack
     pub fn print_stack(&self) {
-        println!("{:?}", self.stack)
+        if self.stack.is_empty() {
+            println!("[]");
+        } else {
+            print!("[");
+            for (i, val) in self.stack.iter().enumerate() {
+                print!("{}", Number::f64_to_string(*val));
+                if i < self.stack.len() - 1 {
+                    print!(", ");
+                }
+            }
+            println!("]");
+        }
     }
 
     /// Parses the given token and performs the appropriate action
@@ -91,10 +112,9 @@ impl Stak {
     fn parse_dupe(&mut self, token: &str) -> Result<(), StakError> {
         let subtokens: Vec<&str> = token.split('~').collect();
         if subtokens.len() == 2 {
-            if subtokens[1] == "" {
+            if subtokens[1].is_empty() {
                 self.dupe(0)
-            }
-            else if let Ok(i) = subtokens[1].parse::<u64>() {
+            } else if let Ok(i) = subtokens[1].parse::<u64>() {
                 self.dupe(i as usize)
             } else {
                 Err(InvalidIndex(subtokens[1].to_string()))
@@ -108,10 +128,9 @@ impl Stak {
     fn parse_rotate_left(&mut self, token: &str) -> Result<(), StakError> {
         let subtokens: Vec<&str> = token.split("<<").collect();
         if subtokens.len() == 2 {
-            if subtokens[1] == "" {
+            if subtokens[1].is_empty() {
                 self.rotate_left(1)
-            }
-            else if let Ok(i) = subtokens[1].parse::<u64>() {
+            } else if let Ok(i) = subtokens[1].parse::<u64>() {
                 self.rotate_left(i as usize)
             } else {
                 Err(InvalidIndex(subtokens[1].to_string()))
@@ -125,10 +144,9 @@ impl Stak {
     fn parse_rotate_right(&mut self, token: &str) -> Result<(), StakError> {
         let subtokens: Vec<&str> = token.split(">>").collect();
         if subtokens.len() == 2 {
-            if subtokens[1] == "" {
+            if subtokens[1].is_empty() {
                 self.rotate_right(1)
-            }
-            else if let Ok(i) = subtokens[1].parse::<u64>() {
+            } else if let Ok(i) = subtokens[1].parse::<u64>() {
                 self.rotate_right(i as usize)
             } else {
                 Err(InvalidIndex(subtokens[1].to_string()))
@@ -212,8 +230,7 @@ impl Stak {
 
     /// Performs a square root
     fn sqrt(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(a.sqrt());
             Ok(())
         } else {
@@ -223,8 +240,7 @@ impl Stak {
 
     /// Performs a log base 2
     fn log2(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(a.log2());
             Ok(())
         } else {
@@ -234,8 +250,7 @@ impl Stak {
 
     /// Performs an inversion
     fn inv(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(1_f64 / a);
             Ok(())
         } else {
@@ -245,8 +260,7 @@ impl Stak {
 
     /// Performs a floor
     fn floor(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(a.floor());
             Ok(())
         } else {
@@ -256,8 +270,7 @@ impl Stak {
 
     /// Performs a ceiling
     fn ceil(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(a.ceil());
             Ok(())
         } else {
@@ -267,8 +280,7 @@ impl Stak {
 
     /// Performs an absolute value
     fn abs(&mut self) -> Result<(), StakError> {
-        if !self.stack.is_empty() {
-            let a = self.stack.pop().unwrap();
+        if let Some(a) = self.stack.pop() {
             self.stack.push(a.abs());
             Ok(())
         } else {
@@ -375,4 +387,31 @@ pub enum StakError {
     IndexOutOfRange(usize),
     #[error("index `{0}` is invalid")]
     InvalidIndex(String),
+    #[error("invalid prefix `{0}`")]
+    InvalidPrefix(String),
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::Stak;
+    #[test]
+    fn push() {
+        let mut s = Stak::new();
+        s.parse_token("5").unwrap();
+        assert_eq!(s.stack, vec![5_f64]);
+        assert!(s.parse_token("foo").is_err());
+    }
+    #[test]
+    fn dupe() {
+        let mut s = Stak::new();
+        s.parse_token("3").unwrap();
+        s.parse_token("4").unwrap();
+        s.parse_token("5").unwrap();
+        s.parse_token("6").unwrap();
+        assert_eq!(s.stack, vec![3_f64, 4_f64, 5_f64, 6_f64]);
+        s.parse_token("~").unwrap();
+        assert_eq!(s.stack, vec![3_f64, 4_f64, 5_f64, 6_f64, 6_f64]);
+        s.parse_token("~3").unwrap();
+        assert_eq!(s.stack, vec![3_f64, 4_f64, 5_f64, 6_f64, 6_f64, 4_f64]);
+    }
 }

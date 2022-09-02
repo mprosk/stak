@@ -1,3 +1,6 @@
+extern crate core;
+
+mod number;
 mod stak;
 
 use stak::Stak;
@@ -95,7 +98,8 @@ fn interactive() {
         }
 
         // Print out the stack
-        stack.print_stack()
+        // println!("{}", stack);
+        stack.print_stack();
     }
 }
 
@@ -110,5 +114,6 @@ fn oneshot(tokens: &[String]) {
             }
         }
     }
+    // println!("{}", stack);
     stack.print_stack();
 }
